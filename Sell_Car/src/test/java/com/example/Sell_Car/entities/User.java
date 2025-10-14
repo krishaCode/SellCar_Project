@@ -1,5 +1,7 @@
 package com.example.Sell_Car.entities;
 
+import com.example.Sell_Car.dto.UserDTO;
+import com.example.Sell_Car.enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,7 +28,16 @@ public class User implements UserDetails {
 
     private String password;
 
-    private String userRole;
+    private UserRole userRole;
+
+    private UserDTO getUserDTO() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(this.id);
+        userDTO.setName(this.name);
+        userDTO.setEmail(this.email);
+        userDTO.setUserRole(this.userRole.name()); // Pass enum name as String
+        return userDTO;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
