@@ -1,6 +1,8 @@
 package com.example.Sell_Car.services.auth;
 
 
+import com.example.Sell_Car.dto.SignupRequest;
+import com.example.Sell_Car.dto.UserDTO;
 import com.example.Sell_Car.entities.User;
 import com.example.Sell_Car.enums.UserRole;
 import com.example.Sell_Car.repositories.UserRepository;
@@ -13,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminServiceImpl implements  AuthService {
+public class AuthServiceImpl implements  AuthService {
     private final UserRepository userRepository;
 
     @PostConstruct
@@ -31,6 +33,17 @@ public class AdminServiceImpl implements  AuthService {
         else  {
             System.out.println("Admin account already exists");
         }
+    }
+
+    @Override
+    public UserDTO signup(SignupRequest signupRequest) {
+        User user = new User();
+        user.setName(signupRequest.getName());
+        user.setEmail(signupRequest.getEmail());
+        user.setUserRole(UserRole.CUSTOMER);
+        user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
+        return userRepository.save(user).getUserDTO();
+
     }
 
     @Override

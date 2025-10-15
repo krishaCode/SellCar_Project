@@ -30,7 +30,7 @@ public class User implements UserDetails {
 
     private UserRole userRole;
 
-    private UserDTO getUserDTO() {
+    public UserDTO getUserDTO() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(this.id);
         userDTO.setName(this.name);
