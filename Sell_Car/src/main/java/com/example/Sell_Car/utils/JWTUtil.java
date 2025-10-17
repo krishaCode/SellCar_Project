@@ -17,7 +17,8 @@ import java.util.function.Function;
 @Component
 public class JWTUtil {
     private Key getSigningKey(){
-        String SECRET="mysecretkeymysecretkeymysecretkey";
+        // Real 256-bit base64-encoded key (32 bytes)
+        String SECRET = "413F44284728282B4C6251655468576D5A7134743777217A25432A462D4A614E645267";
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -52,8 +53,8 @@ public class JWTUtil {
     private String generateToken(Map<String, Object> extractClaims, UserDetails userDetails){
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()*1000*60*60*24))
-                .signWith(getSigningKey(), SignatureAlgorithm.ES256).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*24))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public String generateToken(UserDetails userDetails){
