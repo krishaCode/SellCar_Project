@@ -4,9 +4,10 @@ import { AdminRoutingModule } from "./modules/admin/admin-routing-module";
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.html',
-  styleUrl: './app.css',
-  imports: [AdminRoutingModule]
+  styleUrls: ['./app.css'],
+  imports: [RouterOutlet, AdminRoutingModule]
 })
 export class App {
   protected readonly title = signal('sellcar_angular');
