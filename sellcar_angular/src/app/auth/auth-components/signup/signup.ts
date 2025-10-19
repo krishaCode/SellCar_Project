@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 // ng-zorro imports
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NzSpinModule, NzGridModule],
+  imports: [CommonModule, ReactiveFormsModule, NzSpinModule, NzGridModule, NzFormModule, NzInputModule],
   templateUrl: './signup.html',
   styleUrls: ['./signup.css']
 })
