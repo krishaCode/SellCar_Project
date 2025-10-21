@@ -1,0 +1,57 @@
+[nz-signup-form]{
+    max-width: 600px;
+}
+
+.phone-select{
+    width: 100px;
+}
+
+.registetr-are{
+    margin-bottom: 8px;
+}
+
+.child{
+    padding: 50px;
+    position: absolute;
+    width: 380px;
+    background-color: thistle;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 1px 1px 15px -7px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-bottom: 22px;
+}
+
+nz-form-control{
+    min-width: 200px;
+}
+
+.parent{
+    position: relative;
+    height: 91vh;
+    width: 100%;
+}
+
+.login-form-margin{
+    margin-top: 16px;
+}
+
+.login-form-forgot{
+    float: right;
+}
+
+.login-form-button{
+    width: 100%;
+}
+
+button{
+    background-color: black;
+    border: none;
+}
+
+imdDiv{
+    width: 100%;
+    vertical-align: middle;
+    margin-bottom: 40px;
+}

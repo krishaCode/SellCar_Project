@@ -40,10 +40,29 @@
                                         Please input a valid password!
                                     </ng-container>
                                 </ng-template>
-
-
                             </nz-form-control>
                         </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-control nzHasFeedback [nzErrorTip]="errorTpl">
+                                <input nz-input  placeholder="Confirm Password" 
+                                type="password" id="checkpassword" formControlName="confirmPassword" />
+                                <ng-template #errorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your correct password!
+                                    </ng-container>
+                                    <ng-container *ngIf="control.hasError('confirm')">
+                                        Please input a valid password!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+
+
+                        <button nz-button type="button" class="login-form-button login-form-margin" [nzType]="'primary'" (click)="register()">Register</button>
+                        Or<a routerLink="/login">Login Now!</a>
+
+
 
                     </form>
                 </div>
