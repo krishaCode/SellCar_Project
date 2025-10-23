@@ -7,6 +7,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { AuthService } from '../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -20,7 +22,9 @@ export class Signup {
   signupForm: FormGroup;
   isSpinning = false; // used by template
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router) {
     this.signupForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -43,7 +47,21 @@ export class Signup {
   }
 
   register(){
-    console.log(this.signupForm.value);
+    if (this.signupForm.invalid) {
+      return;
+    }
+    this.isSpinning = true;
+    this.authService.register(this.signupForm.value).subscribe({
+      next: res => {
+        console.log(res);
+        this.isSpinning = false;
+        this.router.navigate(['/login']);
+      },
+      error: err => {
+        console.error(err);
+        this.isSpinning = false;
+      }
+    });
   }
 
 }

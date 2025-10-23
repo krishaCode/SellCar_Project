@@ -21,22 +21,36 @@ import java.util.function.Function;
 public class JWTUtil {
     private static final Logger log = LoggerFactory.getLogger(JWTUtil.class);
 
-    // Read Base64-encoded secret from application.properties: jwt.secret
-    // If it's not provided or invalid, we fallback to a generated secure key.
+    // Read secret from application.properties: jwt.secret
+    // The property may be Base64-encoded key bytes or a passphrase. We ensure a 256-bit key is returned.
     @Value("${jwt.secret:}")
-    private String secretBase64;
+    private String jwtSecret;
 
     private Key getSigningKey(){
-        if (secretBase64 != null && !secretBase64.isBlank()){
+        if (jwtSecret != null && !jwtSecret.isBlank()){
+            // try treating it as Base64-encoded key bytes first
             try {
-                byte[] keyBytes = Decoders.BASE64.decode(secretBase64);
-                // Keys.hmacShaKeyFor will throw if key is too short
-                return Keys.hmacShaKeyFor(keyBytes);
+                byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+                if (keyBytes.length >= 32) { // 256 bits == 32 bytes
+                    return Keys.hmacShaKeyFor(keyBytes);
+                } else {
+                    log.warn("Configured jwt.secret (base64) decoded to {} bytes which is less than 32; will derive a 256-bit key from the secret text.", keyBytes.length);
+                }
             } catch (Exception e){
-                log.warn("Provided jwt.secret is invalid or too weak; falling back to a generated secure key. Error: {}", e.getMessage());
+                // not valid base64 or decode failed; we'll derive a key from the raw string
+                log.debug("jwt.secret is not valid base64 or decode failed: {}. Will derive a 256-bit key from the provided secret text.", e.getMessage());
+            }
+
+            // Derive a 256-bit key by taking the SHA-256 digest of the provided secret string
+            try {
+                java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+                byte[] hash = digest.digest(jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                return Keys.hmacShaKeyFor(hash);
+            } catch (Exception e){
+                log.warn("Failed to derive key from jwt.secret; falling back to generated key. Error: {}", e.getMessage());
             }
         } else {
-            log.warn("No jwt.secret configured — using a generated key for signing (not suitable for production). Set 'jwt.secret' in application.properties as a Base64-encoded >=256-bit key.");
+            log.warn("No jwt.secret configured — using a generated key for signing (not suitable for production). Set 'jwt.secret' in application.properties as a Base64-encoded >=256-bit key or a strong passphrase.");
         }
 
         // fallback: generate a secure key for HS256

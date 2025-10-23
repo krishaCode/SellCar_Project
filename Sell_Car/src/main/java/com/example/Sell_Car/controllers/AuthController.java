@@ -44,6 +44,7 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
+
     @PostMapping("/login")
     public AuthonticationResponse login(@RequestBody AuthonticationRequest authonticationRequest){
         try {
