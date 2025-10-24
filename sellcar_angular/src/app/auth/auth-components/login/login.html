@@ -22,7 +22,7 @@
 							</nz-form-control>
 						</nz-form-item>
 
-						<button nz-button type="button" [nzType]="'primary'" (click)="login()">Login</button>
+						<button nz-button type="button" [nzType]="'primary'" (click)="login()" [disabled]="loginForm.invalid">Login</button>
 						Or <a routerLink="/register">Sign Up</a>
 					</form>
 				</div>

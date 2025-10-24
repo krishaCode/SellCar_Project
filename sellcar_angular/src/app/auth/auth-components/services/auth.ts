@@ -14,6 +14,6 @@ export class AuthService {
 
   // Call backend signin endpoint
   login(payload: any) {
-    return this.http.post(`${BASE_URL}/api/auth/signin`, payload);
+    return this.http.post(`${BASE_URL}/api/auth/login`, payload);
   }
 }
