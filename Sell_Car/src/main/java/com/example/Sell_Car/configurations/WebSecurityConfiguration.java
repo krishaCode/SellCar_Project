@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,15 +27,15 @@ public class WebSecurityConfiguration {
     private final UserService userService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationProvider authenticationProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/**", "/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // register our custom authentication provider so Spring uses our UserDetailsService
-                .authenticationProvider(authenticationProvider);
+        // Spring Security will pick up the UserDetailsService and PasswordEncoder beans to configure authentication
+        ;
         return httpSecurity.build();
     }
 
@@ -47,11 +46,9 @@ public class WebSecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-       DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-       provider.setUserDetailsService(userService.getUserDetailsService());
-       provider.setPasswordEncoder(passwordEncoder());
-       return provider;
+    public UserDetailsService userDetailsService() {
+        // expose the application's UserService's UserDetailsService implementation as a bean
+        return userService.getUserDetailsService();
     }
 
     @Bean
