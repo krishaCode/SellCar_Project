@@ -45,4 +45,12 @@ export class Storage {
       const role: string = this.getUserRole();
       return role === "customer";
     }
+
+      /**
+       * Clear stored auth data (token and user).
+       */
+      static logout(): void {
+        window.localStorage.removeItem(TOKEN);
+        window.localStorage.removeItem(USER);
+      }
   }

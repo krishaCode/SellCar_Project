@@ -33,4 +33,8 @@ export class App {
     });
   }
 
+  logout() {
+    Storage.logout();
+    this.router.navigate(['/login']);
+  }
 }
