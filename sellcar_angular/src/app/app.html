@@ -9,4 +9,28 @@
         </div>
     </nz-header>
 </div>
+
+<div *ngIf="isAdminLoggedIn">
+    <nz-header class="main-header" nz-row nzType="flex" class="custom-navbar">
+        <div class="navbar-title">
+            <a routerLink="/login">LogedIn Admin</a>
+        </div>
+        <div class="nav-links">
+            <a nz-button nzType="link" routerLink="/modules/admin/components/admin-dashboard" routerLinkActive="active">Login</a>
+            <a nz-button nzType="link" routerLink="/register" routerLinkActive="active">Sign Up</a>
+        </div>
+    </nz-header>
+</div>
+
+<div *ngIf="isCustomerLoggedIn">
+    <nz-header class="main-header" nz-row nzType="flex" class="custom-navbar">
+        <div class="navbar-title">
+            <a routerLink="/login">LogedIn Customer</a>
+        </div>
+        <div class="nav-links">
+            <a nz-button nzType="link" routerLink="/modules/customer/components/customer-dashboard" routerLinkActive="active">Login</a>
+            <a nz-button nzType="link" routerLink="/register" routerLinkActive="active">Sign Up</a>
+        </div>
+    </nz-header>
+</div>
 <router-outlet></router-outlet>
