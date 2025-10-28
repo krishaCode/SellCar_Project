@@ -20,8 +20,8 @@ public class AuthServiceImpl implements  AuthService {
 
     @PostConstruct
     public void createAdminAccount() {
-        Optional<User> optionAdmin = userRepository.findByUserRole(UserRole.ADMIN);
-        if (optionAdmin.isEmpty()) {
+        User adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
+        if (adminAccount == null) {
             User admin = new User();
             admin.setName("Admin");
             admin.setEmail("admin@test.com");

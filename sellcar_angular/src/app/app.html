@@ -1,7 +1,7 @@
 <div>
     <nz-header class="main-header" nz-row nzType="flex" class="custom-navbar">
         <div class="navbar-title">
-            <a routerLink="/login">Car Rental Service</a>
+            <a routerLink="/login">{{ title() }}</a>
         </div>
         <div class="nav-links">
             <a nz-button nzType="link" routerLink="/login" routerLinkActive="active">Login</a>
@@ -13,11 +13,11 @@
 <div *ngIf="isAdminLoggedIn">
     <nz-header class="main-header" nz-row nzType="flex" class="custom-navbar">
         <div class="navbar-title">
-            <a routerLink="/login">LogedIn Admin</a>
+            <a routerLink="/modules/admin/components/admin-dashboard">{{ title() }}</a>
         </div>
         <div class="nav-links">
-            <a nz-button nzType="link" routerLink="/modules/admin/components/admin-dashboard" routerLinkActive="active">Login</a>
-            <a nz-button nzType="link" (click)="logout()" routerLinkActive="active">Sign Up</a>
+            <a nz-button nzType="link" routerLink="/modules/admin/components/admin-dashboard" routerLinkActive="active">Dashboard</a>
+            <a nz-button nzType="link" (click)="logout()">Logout</a>
         </div>
     </nz-header>
 </div>
@@ -25,11 +25,11 @@
 <div *ngIf="isCustomerLoggedIn">
     <nz-header class="main-header" nz-row nzType="flex" class="custom-navbar">
         <div class="navbar-title">
-            <a routerLink="/login">LogedIn Customer</a>
+            <a routerLink="/modules/customer/components/customer-dashboard">{{ title() }}</a>
         </div>
         <div class="nav-links">
-            <a nz-button nzType="link" routerLink="/modules/customer/components/customer-dashboard" routerLinkActive="active">Login</a>
-            <a nz-button nzType="link" (click)="logout()" routerLinkActive="active">Sign Up</a>
+            <a nz-button nzType="link" routerLink="/modules/customer/components/customer-dashboard" routerLinkActive="active">Dashboard</a>
+            <a nz-button nzType="link" (click)="logout()">Logout</a>
         </div>
     </nz-header>
 </div>

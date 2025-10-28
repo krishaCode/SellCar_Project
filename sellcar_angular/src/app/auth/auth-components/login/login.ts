@@ -6,7 +6,6 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '../services/auth';
 import { Storage } from '../services/storage/storage';
 import { Router } from '@angular/router';
@@ -19,13 +18,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.css']
 })
 export class Login {
-  loginForm: FormGroup;
-  isSpinning = false;
+  loginForm!: FormGroup;
+  isSpinning: boolean= false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private message: NzMessageService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(4)]]
     });
   }
 
@@ -36,35 +35,42 @@ export class Login {
     this.isSpinning = true;
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-        console.log('login success', res);
+        console.log(res);
         this.isSpinning = false;
-        // navigate to home or dashboard
-        this.router.navigate(['/']);
-
-        if (res && res.userId !== null && res.userId !== undefined) {
+        if (res && res.userId != null) {
           const user = {
             id: res.userId,
-            role: res.userRole,
+            role: res.userRole ?? res.UserRole ?? null,
           };
-          Storage.saveUser(user);
-          Storage.saveToken(res.jwt);
 
-          if (Storage.isAdminLoggedIn && Storage.isAdminLoggedIn()) {
-            this.router.navigate(['/admin']);
-          } else if (Storage.isCustomerLoggedIn && Storage.isCustomerLoggedIn()) {
-            this.router.navigate(['/customer']);
+          Storage.saveToken(res.token ?? res.jwt ?? '');
+          Storage.saveUser(user);
+
+          // Prefer using the role returned by the backend to decide navigation
+          const role = (res.userRole ?? res.UserRole ?? '').toString().toLowerCase();
+          if (role === 'admin') {
+            // navigate to admin dashboard route
+            this.router.navigate(['/admin', 'dashboard']);
+          } else if (role === 'customer') {
+            // navigate to customer dashboard route
+            this.router.navigate(['/customer', 'dashboard']);
           } else {
-            this.message.error('Unknown user role. Please contact support.');
+            // Fallback: attempt to infer from stored data
+            if (Storage.isAdminLoggedIn && Storage.isAdminLoggedIn()) {
+              this.router.navigate(['/admin', 'dashboard']);
+            } else if (Storage.isCustomerLoggedIn && Storage.isCustomerLoggedIn()) {
+              this.router.navigate(['/customer', 'dashboard']);
+            } else {
+              console.error('Unknown user role');
+            }
           }
         }
       },
       error: (err: any) => {
         console.error('login error', err);
         this.isSpinning = false;
-        this.message.error('Login failed. Please try again.');
       }
     });
   }
 
-  
 }
