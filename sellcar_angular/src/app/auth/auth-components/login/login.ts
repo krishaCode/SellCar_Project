@@ -37,10 +37,11 @@ export class Login {
       next: (res: any) => {
         console.log(res);
         this.isSpinning = false;
-        if (res && res.userId != null) {
+        if (res) {
+          const id = res.userId ?? res.userID ?? null;
           const user = {
-            id: res.userId,
-            role: res.userRole ?? res.UserRole ?? null,
+            id,
+            role: (res.userRole ?? res.UserRole ?? null),
           };
 
           Storage.saveToken(res.token ?? res.jwt ?? '');
