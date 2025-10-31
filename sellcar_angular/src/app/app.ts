@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, Event, NavigationEnd } from '@angular/router';
+import { AuthState } from './auth/auth-state';
 import { AdminRoutingModule } from "./modules/admin/admin-routing-module";
 import { NzFormModule } from "ng-zorro-antd/form";
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -22,7 +23,22 @@ export class App {
   isCustomerLoggedIn: boolean = Storage.isCustomerLoggedIn();
   isAdminLoggedIn: boolean = Storage.isAdminLoggedIn();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authState: AuthState) {
+    // initialize reactive subscription to role changes
+    this.authState.role$.subscribe(role => {
+      this.isAdminLoggedIn = role === 'admin' || role === '0';
+      this.isCustomerLoggedIn = role === 'customer' || role === '1';
+    });
+    // initialize role from storage so navbar reflects logged-in user on page reload / direct route
+    try {
+      const storedRole = Storage.getUserRole();
+      if (storedRole) {
+        this.authState.setRole(storedRole);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
 
   ngOnInit() {
     this.router.events.subscribe((event: Event) => {
@@ -36,6 +52,7 @@ export class App {
 
   logout() {
     Storage.logout();
+    this.authState.clear();
     this.router.navigate(['/login']);
   }
 

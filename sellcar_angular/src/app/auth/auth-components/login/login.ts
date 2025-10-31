@@ -8,6 +8,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { AuthService } from '../services/auth';
 import { Storage } from '../services/storage/storage';
+import { AuthState } from '../../auth-state';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,7 +22,7 @@ export class Login {
   loginForm!: FormGroup;
   isSpinning: boolean= false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private authState: AuthState) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]]
@@ -47,19 +48,22 @@ export class Login {
           Storage.saveToken(res.token ?? res.jwt ?? '');
           Storage.saveUser(user);
 
-          // Prefer using the role returned by the backend to decide navigation
-          const role = (res.userRole ?? res.UserRole ?? '').toString().toLowerCase();
-          if (role === 'admin') {
-            // navigate to admin dashboard route
-            this.router.navigate(['/admin', 'dashboard']);
-          } else if (role === 'customer') {
-            // navigate to customer dashboard route
+          // Normalize role string and broadcast it to App via AuthState
+          const roleRaw = (res.userRole ?? res.UserRole ?? user.role ?? '');
+          const role = String(roleRaw).toLowerCase();
+          // update auth state so App/navbar reacts immediately
+          this.authState.setRole(role);
+
+          if (role === 'admin' || role === '0') {
+            // navigate admin to Post Car page after login
+            this.router.navigate(['/admin', 'car']);
+          } else if (role === 'customer' || role === '1') {
             this.router.navigate(['/customer', 'dashboard']);
           } else {
-            // Fallback: attempt to infer from stored data
-            if (Storage.isAdminLoggedIn && Storage.isAdminLoggedIn()) {
-              this.router.navigate(['/admin', 'dashboard']);
-            } else if (Storage.isCustomerLoggedIn && Storage.isCustomerLoggedIn()) {
+            // fallback: try Storage helpers
+            if (Storage.isAdminLoggedIn()) {
+              this.router.navigate(['/admin', 'car']);
+            } else if (Storage.isCustomerLoggedIn()) {
               this.router.navigate(['/customer', 'dashboard']);
             } else {
               console.error('Unknown user role');

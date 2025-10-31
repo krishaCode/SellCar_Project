@@ -30,8 +30,20 @@ export class Storage {
 
   static getUserRole(){
     const user = this.getUser();
-    if(user == null) return "";
-      return user.role;
+    if (user == null) return "";
+    const role = user.role;
+    // Normalize numeric roles from backend: 0 -> admin, 1 -> customer
+    if (typeof role === 'number') {
+      if (role === 0) return 'admin';
+      if (role === 1) return 'customer';
+      return String(role);
+    }
+    if (typeof role === 'string') {
+      if (role === '0') return 'admin';
+      if (role === '1') return 'customer';
+      return role;
+    }
+    return String(role);
     }
 
     static isAdminLoggedIn(): boolean {
