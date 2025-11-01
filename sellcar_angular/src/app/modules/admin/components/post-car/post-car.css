@@ -1,0 +1,61 @@
+/* Styles adapted from login.css to provide consistent layout and spacing */
+
+[nz-login-form]{
+	max-width: 600px;
+}
+
+.child{
+	padding: 50px;
+	position: absolute;
+	width: 380px;
+	background-color: thistle;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 1px 1px 15px -7px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	margin-bottom: 22px;
+}
+
+.parent{
+	position: relative;
+	height: 91vh;
+	width: 100%;
+}
+
+.login-form-margin{
+	margin-top: 16px;
+}
+
+.login-form-button{
+	width: 100%;
+}
+
+button{
+	background-color: black;
+	border: none;
+	color: white;
+}
+
+.imgDiv{
+	width: 100%;
+	vertical-align: middle;
+	margin-bottom: 40px;
+}
+
+.profile-nadge{
+	text-align: center;
+	margin-bottom: 16px;
+}
+
+.upload-lable{
+	cursor: pointer;
+}
+
+.profile{
+	width: 120px;
+	height: 120px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+

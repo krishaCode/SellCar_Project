@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 // ng-zorro imports
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NzSpinModule, NzGridModule, NzFormModule, NzInputModule, NzButtonModule],
+  imports: [CommonModule, NgIf, ReactiveFormsModule, NzSpinModule, NzGridModule, NzFormModule, NzInputModule, NzButtonModule],
   templateUrl: './signup.html',
   styleUrls: ['./signup.css']
 })

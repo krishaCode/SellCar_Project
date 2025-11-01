@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -10,7 +10,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 @Component({
   selector: 'app-post-car',
   standalone: true,
-  imports: [CommonModule, NzSpinModule, NzFormModule, NzInputModule, NzSelectModule, NzButtonModule],
+  imports: [CommonModule, NgIf, NzSpinModule, NzFormModule, NzInputModule, NzSelectModule, NzButtonModule],
   templateUrl: './post-car.html',
   styleUrls: ['./post-car.css']
 })
