@@ -2,11 +2,16 @@
     <nz-spin [nzSpinning]="isSpinning" [nzSize]="large" nzTip="working...">
         <div class="parent">
             <div class="child">
-                <div nz-row class="imgDiv">
-                    <h2 style="margin-left: 230px"></h2>
-                </div>
+                        <div nz-row class="imgDiv">
+                            <h2 style="margin-left: 230px">Post Car</h2>
+                            <div class="upload-controls">
+                                <input type="file" id="upload_profile_image" #fileInput accept="image/*" (change)="onFileSelected($event)" hidden />
+                                <button nz-button nzType="primary" (click)="fileInput.click()">Upload Photo</button>
+                                <button nz-button nzType="default" *ngIf="selectedFile" (click)="removeSelected()">Remove</button>
+                            </div>
+                        </div>
 
-                <form nz-form>
+                <form nz-form [formGroup]="postCarForm">
                     <div nz-row>
                         <div nz-col [nzMd]="24" [nzSm]="24" [nzXs]="24">
                             <div class="profile-nadge">
@@ -18,7 +23,7 @@
 
                         <div nz-col nzSpan="24">
                             <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required">
-                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Brand Name">
+                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Brand Name" formControlName="brand">
                                     <nz-option *ngFor="let brand of listBrsnds" [nzLabel]="brand" [nzValue]="brand"></nz-option>
                                 </nz-select>
                             </nz-form-control>
@@ -26,7 +31,7 @@
 
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required">
+                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required" formControlName="name">
                                     <input nz-input placeholder="Name" />
                                 </nz-form-control>
                             </nz-form-item>
@@ -35,7 +40,7 @@
                         <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-control nzErrorTip="This Input Is Required">
-                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Type">
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Type" formControlName="type">
                                         <nz-option *ngFor="let type of listOfType" [nzLabel]="type" [nzValue]="type"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
@@ -45,7 +50,7 @@
                         <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-control nzErrorTip="This Input Is Required">
-                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Transmission">
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Transmission" formControlName="transmission">
                                         <nz-option *ngFor="let transmission of listOfTransmission" [nzLabel]="transmission" [nzValue]="transmission"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
@@ -55,7 +60,7 @@
                         <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-control nzErrorTip="This Input Is Required">
-                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Color">
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a Color" formControlName="color">
                                         <nz-option *ngFor="let color of listOfColor" [nzLabel]="color" [nzValue]="color"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
@@ -64,7 +69,7 @@
 
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required">
+                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required" formControlName="price">
                                     <input nz-input placeholder="Price" />
                                 </nz-form-control>
                             </nz-form-item>
@@ -72,13 +77,13 @@
 
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required">
+                                <nz-form-control nzHasFeedback [nzXs]="24" nzErrorTip="This Input Is Required" formControlName="description">
                                     <textarea rows="1" nz-input placeholder="Description"></textarea>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
 
-                        <button nz-button class="login-form-button login-form-margin" nzType="primary">Post Car</button>
+                        <button nz-button class="login-form-button login-form-margin" nzType="primary" (click)="postCar()">Post Car</button>
 
                     </div>
                 </form>
